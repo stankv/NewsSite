@@ -12,6 +12,8 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'category','time_create', 'photo', 'is_published')  # отображение столбцов
     list_display_links = ("id", "title")  # отображение как ссылки
     search_fields = ('title', 'content')  # по каким полям можно делать поиск
+    list_editable = ('is_published',)     # задаем возможность редактировать поля прямо в таблице
+    list_filter = ('is_published', 'time_create')  # задаем возможность фильтрации
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Article, ArticleAdmin)
