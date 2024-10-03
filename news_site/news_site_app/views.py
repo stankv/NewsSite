@@ -24,7 +24,9 @@ def index(request):
 
 
 def about(request):
-    return render(request, 'news_site_app/about.html', {"menu": menu, "title": "О сайте"})
+    cats = Category.objects.all()
+    return render(request, 'news_site_app/about.html', {"menu": menu,
+                                                        "cats": cats, "title": "О сайте"})
 
 
 def addpage(request):
@@ -39,9 +41,12 @@ def login(request):
     return HttpResponse('Авторизация')
 
 
-def show_category(request, cat_id):
-    posts = Article.objects.filter(category=cat_id)
+def show_category(request, cat_slug):
+    cat = get_object_or_404(Category, slug=cat_slug)
     cats = Category.objects.all()
+    posts = Article.objects.filter(category=cat)
+    #print(posts)
+    #cats = Category.objects.all()
     if len(posts) == 0:
         raise Http404
 
@@ -49,17 +54,18 @@ def show_category(request, cat_id):
         "posts": posts,
         "cats": cats,
         "menu": menu,
-        "title": "Отображение по рубрикам",
-        "cat_selected": cat_id,
+        "title": f"Новости по категории {cat.name}",
+        "cat_selected": cat.id,
     }
     return render(request, 'news_site_app/index.html', context=context)
 
 
-def show_post(request, post_id):
-    post = get_object_or_404(Article, pk=post_id)
+def show_post(request, post_slug):
+    post = get_object_or_404(Article, slug=post_slug)
+    cats = Category.objects.all()
     context = {
         "post": post,
-        #"cats": cats,
+        "cats": cats,
         "menu": menu,
         "title": post.title,
         "cat_selected": post.category_id,

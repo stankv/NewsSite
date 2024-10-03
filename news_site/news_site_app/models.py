@@ -11,7 +11,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('category', kwargs={'cat_id': self.pk})
+        return reverse('category', kwargs={'cat_slug': self.slug})
 
     class Meta:
         verbose_name = 'Рубрика'
@@ -23,7 +23,7 @@ class Article(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название")
     slug = models.SlugField(max_length=255, unique=True ,db_index=True, verbose_name="URL")
     content = models.TextField(blank=True, verbose_name="Содержание")
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name="Изображение")
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d/',null=True, blank=True, verbose_name="Изображение")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
@@ -33,7 +33,7 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_id': self.pk})
+        return reverse('post', kwargs={'post_slug': self.slug})
 
     class Meta:
         verbose_name = 'Статьи'
