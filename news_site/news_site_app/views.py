@@ -1,8 +1,5 @@
-from lib2to3.fixes.fix_input import context
-
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render, redirect
-from unicodedata import category
+from django.shortcuts import render, get_object_or_404
 
 from .models import *
 
@@ -59,7 +56,15 @@ def show_category(request, cat_id):
 
 
 def show_post(request, post_id):
-    return HttpResponse(f'Отображение статьи с id = {post_id}')
+    post = get_object_or_404(Article, pk=post_id)
+    context = {
+        "post": post,
+        #"cats": cats,
+        "menu": menu,
+        "title": post.title,
+        "cat_selected": post.category_id,
+    }
+    return render(request, 'news_site_app/post.html', context=context)
 
 
 # обработка несуществующего маршрута (страницы) - возврат страницы 404
