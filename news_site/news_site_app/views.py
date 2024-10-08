@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
+from .forms import *
 from .models import *
 
 # Create your views here.
@@ -30,7 +31,17 @@ def about(request):
 
 
 def addpage(request):
-    return HttpResponse('Добавление статьи')
+    if request.method == "POST":
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            try:
+                Article.objects.create(**form.cleaned_data)
+                return  redirect('home')
+            except:
+                form.add_error(None, "Не удалось добавить статью")
+    else:
+        form = AddPostForm()
+    return render(request, 'news_site_app/addpage.html', {"form": form, "menu": menu, "title": "Добавить статью"})
 
 
 def contact(request):
@@ -45,8 +56,6 @@ def show_category(request, cat_slug):
     cat = get_object_or_404(Category, slug=cat_slug)
     cats = Category.objects.all()
     posts = Article.objects.filter(category=cat)
-    #print(posts)
-    #cats = Category.objects.all()
     if len(posts) == 0:
         raise Http404
 
