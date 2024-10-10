@@ -32,13 +32,14 @@ def about(request):
 
 def addpage(request):
     if request.method == "POST":
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
-            try:
-                Article.objects.create(**form.cleaned_data)
-                return  redirect('home')
-            except:
-                form.add_error(None, "Не удалось добавить статью")
+            # try:
+            #     Article.objects.create(**form.cleaned_data)    # так если форма не связана с моделью
+            #     return  redirect('home')
+            # except:
+            #     form.add_error(None, "Не удалось добавить статью")
+            form.save()  # так если форма связана с моделью, try-except не нужен
     else:
         form = AddPostForm()
     return render(request, 'news_site_app/addpage.html', {"form": form, "menu": menu, "title": "Добавить статью"})
