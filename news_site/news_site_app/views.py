@@ -2,17 +2,13 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import *
 from .models import *
+from .utils import *
 
 # Create your views here.
-menu = [{"title":"О сайте", "url_name": "about"},
-        {"title":"Добавить статью", "url_name": "add_page"},
-        {"title":"Обратная связь", "url_name": "contact"},
-        {"title":"Войти", "url_name": "login"},
-]
-
 #----------------------------------------------------------------------------------------------------------------------
 # представление как функция
 # def index(request):
@@ -29,20 +25,16 @@ menu = [{"title":"О сайте", "url_name": "about"},
 
 
 # представление как класс
-class IndexView(ListView):
+class IndexView(DataMixin, ListView):
     model = Article
     template_name = 'news_site_app/index.html'    # указываем путь к нашему шаблону, а не article_list.html
     context_object_name = 'posts'    # указываем posts для цикла в index.html, а не object_list
 
     # для передачи в шаблон контекста объекта списка постов menu
     def get_context_data(self, *, object_list=None, **kwargs):
-        cats = Category.objects.all()
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Главная страница'
-        context['menu'] = menu
-        context['cats'] = cats
-        context['cat_selected'] = 0    # чтобы в меню пункт Все категории был выбранным ("нажатым"
-        return context
+        c_def = self.get_user_context(title="Главная страница")
+        return dict(list(context.items()) + list(c_def.items()))
 
     # чтобы отображались только те статьи, что отмечены для публикации
     def get_queryset(self):
@@ -72,19 +64,18 @@ def about(request):
 #         form = AddPostForm()
 #     return render(request, 'news_site_app/addpage.html', {"cats": cats, "form": form, "menu": menu, "title": "Добавить статью"})
 
-class AddPage(CreateView):
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'news_site_app/addpage.html'
     success_url = reverse_lazy('home')    # адрес куда будет перенаправлен после успешной отправки формы
                                           # это нужно когда нет функций get_absolute_url()
+    login_url = reverse_lazy('home')
+    raise_exception = True                # если True, то будет выброшено исключение Http403 (доступ запрещен)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        cats = Category.objects.all()
-        context['title'] = 'Добавление статьи'
-        context['menu'] = menu
-        context['cats'] = cats
-        return context
+        c_def = self.get_user_context(title="Добавление статьи")
+        return dict(list(context.items()) + list(c_def.items()))
 #----------------------------------------------------------------------------------------------------------------------
 
 def contact(request):
@@ -114,7 +105,7 @@ def login(request):
 #     return render(request, 'news_site_app/index.html', context=context)
 
 # представление как класс
-class ArticleCategory(ListView):
+class ArticleCategory(DataMixin, ListView):
     model = Article
     template_name = 'news_site_app/index.html'
     context_object_name = 'posts'
@@ -124,13 +115,10 @@ class ArticleCategory(ListView):
         return Article.objects.filter(category__slug=self.kwargs['cat_slug'], is_published=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        cats = Category.objects.all()
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Категория - ' + str(context['posts'][0].category)
-        context['menu'] = menu
-        context['cats'] = cats
-        context['cat_selected'] = context['posts'][0].category_id
-        return context
+        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].category),
+                                      cat_selected=context['posts'][0].category_id)
+        return dict(list(context.items()) + list(c_def.items()))
 #----------------------------------------------------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------------------------------------------------
@@ -146,7 +134,7 @@ class ArticleCategory(ListView):
 #     }
 #     return render(request, 'news_site_app/post.html', context=context)
 
-class ShowPost(DetailView):
+class ShowPost(DataMixin, DetailView):
     model = Article
     template_name = 'news_site_app/post.html'
     slug_url_kwarg = 'post_slug'    # указываем наше название вместо slug по умолчанию
@@ -155,11 +143,8 @@ class ShowPost(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        cats = Category.objects.all()
-        context['title'] = context['post']
-        context['menu'] = menu
-        context['cats'] = cats
-        return context
+        c_def = self.get_user_context(title=context['post'])
+        return dict(list(context.items()) + list(c_def.items()))
 #----------------------------------------------------------------------------------------------------------------------
 
 # обработка несуществующего маршрута (страницы) - возврат страницы 404
