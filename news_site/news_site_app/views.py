@@ -40,7 +40,7 @@ class IndexView(DataMixin, ListView):
 
     # чтобы отображались только те статьи, что отмечены для публикации
     def get_queryset(self):
-        return Article.objects.filter(is_published=True)
+        return Article.objects.filter(is_published=True).select_related('category')    # убрали дублирование sql-запросов
 #----------------------------------------------------------------------------------------------------------------------
 
 
@@ -114,12 +114,15 @@ class ArticleCategory(DataMixin, ListView):
     allow_empty = False    # генерирует ошибку 404, если выход за пределы массива posts (или нет такого слага)
 
     def get_queryset(self):
-        return Article.objects.filter(category__slug=self.kwargs['cat_slug'], is_published=True)
+        return Article.objects.filter(category__slug=self.kwargs['cat_slug'], is_published=True).select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].category),
-                                      cat_selected=context['posts'][0].category_id)
+        # c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].category),
+        #                               cat_selected=context['posts'][0].category_id)
+        c = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(title='Категория - ' + str(c.name),
+                                      cat_selected=c.pk)
         return dict(list(context.items()) + list(c_def.items()))
 #----------------------------------------------------------------------------------------------------------------------
 
