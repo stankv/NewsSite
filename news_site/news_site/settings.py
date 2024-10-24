@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'captcha',
     'news_site_app.apps.NewsSiteAppConfig',
 ]
 
@@ -135,3 +136,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        # "LOCATION": "c:/foo/bar",    # for windows. for linux - "LOCATION": "/var/tmp/django_cache",
+        "LOCATION": os.path.join(BASE_DIR, "news_site_cache"),
+    }
+}
