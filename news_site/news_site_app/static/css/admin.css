@@ -1,0 +1,11 @@
+#header, .module caption  {
+    background: #5e3a00;
+}
+
+a.section:link, a.section:visited {
+color: #f5dd5d;
+}
+
+div.breadcrumbs {
+background:#555
+}
