@@ -5,7 +5,7 @@ from .views import *
 urlpatterns = [
     # path('', index, name='home'),    # для вьюхи-функции
     path('', cache_page(60 * 1)(IndexView.as_view()), name='home'),
-    path('about/', about, name='about'),
+    path('about/', AboutView.as_view(), name='about'),
     path('addpage/', AddPage.as_view(), name='add_page'),
     path('contact/', ContactFormView.as_view(), name='contact'),
     path('login/', LoginUser.as_view(), name='login'),

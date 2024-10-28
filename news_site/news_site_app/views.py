@@ -3,14 +3,13 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, FormView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import *
 from .models import *
 from .utils import *
 
-# Create your views here.
 #----------------------------------------------------------------------------------------------------------------------
 # представление как функция
 # def index(request):
@@ -44,10 +43,18 @@ class IndexView(DataMixin, ListView):
 #----------------------------------------------------------------------------------------------------------------------
 
 
-def about(request):
-    cats = Category.objects.all()
-    return render(request, 'news_site_app/about.html', {"menu": menu,
-                                                        "cats": cats, "title": "О сайте"})
+# def about(request):
+#     cats = Category.objects.all()
+#     return render(request, 'news_site_app/about.html', {"menu": menu,
+#                                                         "cats": cats, "title": "О сайте"})
+
+class AboutView(DataMixin, TemplateView):
+    template_name = 'news_site_app/about.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='О сайте')
+        return dict(list(context.items()) + list(c_def.items()))
 
 
 #----------------------------------------------------------------------------------------------------------------------
@@ -135,7 +142,7 @@ class ArticleCategory(DataMixin, ListView):
         c_def = self.get_user_context(title='Категория - ' + str(c.name),
                                       cat_selected=c.pk)
         return dict(list(context.items()) + list(c_def.items()))
-#----------------------------------------------------------------------------------------------------------------------
+
 
 #----------------------------------------------------------------------------------------------------------------------
 # def show_post(request, post_slug):
