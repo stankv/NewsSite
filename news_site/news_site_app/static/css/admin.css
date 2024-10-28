@@ -2,7 +2,7 @@
     background: #5e3a00;
 }
 
-a.section:link, a.section:visited {
+a.section:link, a.section:visited, #nav-sidebar .current-app .section:visited {
 color: #f5dd5d;
 }
 
