@@ -211,3 +211,13 @@ def page_not_found(request, exception):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+#----------------------------------------------------------------------------------------------------------------------
+# DRF
+
+from rest_framework import generics
+from .serializers import ArticleSerializer
+
+class ArticleAPIView(generics.ListAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
