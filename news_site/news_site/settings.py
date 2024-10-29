@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'captcha',
     'news_site_app.apps.NewsSiteAppConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
