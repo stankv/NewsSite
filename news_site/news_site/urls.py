@@ -23,6 +23,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/articlelist/', ArticleAPIView.as_view()),
     path('captcha/', include('captcha.urls')),
     path('', include('news_site_app.urls')),
 ]
