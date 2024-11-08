@@ -223,36 +223,40 @@ from rest_framework.response import Response
 from django.forms import model_to_dict
 
 
-class ArticleAPIView(APIView):
-    def get(self, request):    # метод для работы с GET запросами
-        a = Article.objects.all()
-        return Response({'articles': ArticleSerializer(a, many=True).data})    # Response преобразует словарь в JSON-строку
-                                                                          # many - обрабатывать не одну, а несколько записей
-    def post(self, request):    # метод для работы с POST запросами
-        serializer = ArticleSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)    # - проверяет валидность данных
-        serializer.save()
-        return Response({'post': serializer.data})
+class ArticleAPIList(generics.ListCreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({"error": "Method Put not allowed"})
-        try:
-            instance = Article.objects.get(pk=pk)
-        except:
-            return Response({"error": "Article not found"})
-        serializer = ArticleSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"post": serializer.data})
 
-    def delete(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method DELETE not allowed"})
-        # здесь код для удаления записи с переданным pk
-        instance = Article.objects.get(pk=pk)
-        instance.delete()
-
-        return Response({"post": "delete post " + str(pk)})
+# class ArticleAPIView(APIView):
+#     def get(self, request):    # метод для работы с GET запросами
+#         a = Article.objects.all()
+#         return Response({'articles': ArticleSerializer(a, many=True).data})    # Response преобразует словарь в JSON-строку
+#                                                                           # many - обрабатывать не одну, а несколько записей
+#     def post(self, request, *args, **kwargs):    # метод для работы с POST запросами
+#         serializer = ArticleSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)    # - проверяет валидность данных
+#         serializer.save()
+#         return Response({'post': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({"error": "Method Put not allowed"})
+#         try:
+#             instance = Article.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Article not found"})
+#         serializer = ArticleSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"post": serializer.data})
+#
+#     def delete(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method DELETE not allowed"})
+#         instance = Article.objects.get(pk=pk)
+#         instance.delete()
+#
+#         return Response({"post": "delete post " + str(pk)})
