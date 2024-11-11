@@ -21,10 +21,13 @@ from news_site import settings
 from news_site_app.views import *
 from django.urls import path, include
 
+from news_site_app.views import ArticleAPIDetailView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/articlelist/', ArticleAPIList.as_view()),
     path('api/v1/articlelist/<int:pk>/', ArticleAPIList.as_view()),
+    path('api/v1/articledetail/<int:pk>/', ArticleAPIDetailView.as_view()),
     path('captcha/', include('captcha.urls')),
     path('', include('news_site_app.urls')),
 ]

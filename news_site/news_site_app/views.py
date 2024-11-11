@@ -227,6 +227,14 @@ class ArticleAPIList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
+class ArticleAPIUpdate(generics.UpdateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+
+class ArticleAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+
 
 # class ArticleAPIView(APIView):
 #     def get(self, request):    # метод для работы с GET запросами
