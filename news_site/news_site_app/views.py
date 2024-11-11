@@ -216,24 +216,28 @@ def logout_user(request):
 # DRF
 #----------------------------------------------------------------------------------------------------------------------
 
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from .serializers import ArticleSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
 
 
-class ArticleAPIList(generics.ListCreateAPIView):
+class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
 
-class ArticleAPIUpdate(generics.UpdateAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
-
-class ArticleAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleSerializer
+# class ArticleAPIList(generics.ListCreateAPIView):
+#     queryset = Article.objects.all()
+#     serializer_class = ArticleSerializer
+#
+# class ArticleAPIUpdate(generics.UpdateAPIView):
+#     queryset = Article.objects.all()
+#     serializer_class = ArticleSerializer
+#
+# class ArticleAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Article.objects.all()
+#     serializer_class = ArticleSerializer
 
 
 # class ArticleAPIView(APIView):
