@@ -222,33 +222,38 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 
 
-class ArticleViewSet(viewsets.ModelViewSet):
+# class ArticleViewSet(viewsets.ModelViewSet):
+#     queryset = Article.objects.all()
+#     serializer_class = ArticleSerializer
+#
+#     @action(methods=['get'], detail=False)
+#     def categories(self, request):
+#         cats = Category.objects.all()
+#         return Response({'categories': [c.name for c in cats]})
+#
+#     @action(methods=['get'], detail=True)
+#     def category(self, request, pk=None):
+#         cat = Category.objects.get(pk=pk)
+#         return Response({'category': cat.name})
+
+class ArticleAPIList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
-    @action(methods=['get'], detail=False)
-    def categories(self, request):
-        cats = Category.objects.all()
-        return Response({'categories': [c.name for c in cats]})
+class ArticleAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
 
-    @action(methods=['get'], detail=True)
-    def category(self, request, pk=None):
-        cat = Category.objects.get(pk=pk)
-        return Response({'category': cat.name})
-
-# class ArticleAPIList(generics.ListCreateAPIView):
-#     queryset = Article.objects.all()
-#     serializer_class = ArticleSerializer
-#
-# class ArticleAPIUpdate(generics.UpdateAPIView):
-#     queryset = Article.objects.all()
-#     serializer_class = ArticleSerializer
-#
-# class ArticleAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Article.objects.all()
-#     serializer_class = ArticleSerializer
+class ArticleAPIDestroy(generics.RetrieveDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 # class ArticleAPIView(APIView):
