@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 
@@ -28,6 +29,7 @@ class Article(models.Model):
     time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name="Рубрика")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь", default=1)
 
     def __str__(self):
         return self.title
