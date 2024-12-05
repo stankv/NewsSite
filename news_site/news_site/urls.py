@@ -22,12 +22,15 @@ from news_site_app.views import *
 from django.urls import path, include
 from rest_framework import routers
 
-router = routers.SimpleRouter()
-router.register(r'article', ArticleViewSet, basename='article')
+# router = routers.SimpleRouter()
+# router.register(r'article', ArticleViewSet, basename='article')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls)),
+    #path('api/v1/', include(router.urls)),
+    path('api/v1/article/', ArticleAPIList.as_view()),
+    path('api/v1/article/<int:pk>/', ArticleAPIUpdate.as_view()),
+    path('api/v1/articledelete/<int:pk>/', ArticleAPIDestroy.as_view()),
     path('captcha/', include('captcha.urls')),
     path('', include('news_site_app.urls')),
 ]
