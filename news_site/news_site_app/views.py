@@ -222,8 +222,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.forms import model_to_dict
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+from rest_framework.authentication import TokenAuthentication
 
 
 # class ArticleViewSet(viewsets.ModelViewSet):
@@ -248,7 +249,8 @@ class ArticleAPIList(generics.ListCreateAPIView):
 class ArticleAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)    # включение доступа только по токенам
 
 class ArticleAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Article.objects.all()

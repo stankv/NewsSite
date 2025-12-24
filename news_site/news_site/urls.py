@@ -19,7 +19,7 @@ from django.contrib import admin
 
 from news_site import settings
 from news_site_app.views import *
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 
 # router = routers.SimpleRouter()
@@ -27,10 +27,13 @@ from rest_framework import routers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
     #path('api/v1/', include(router.urls)),
     path('api/v1/article/', ArticleAPIList.as_view()),
     path('api/v1/article/<int:pk>/', ArticleAPIUpdate.as_view()),
     path('api/v1/articledelete/<int:pk>/', ArticleAPIDestroy.as_view()),
+    path('api/v1/auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
     path('captcha/', include('captcha.urls')),
     path('', include('news_site_app.urls')),
 ]
