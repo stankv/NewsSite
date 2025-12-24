@@ -225,6 +225,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
 
 
 # class ArticleViewSet(viewsets.ModelViewSet):
@@ -241,16 +242,25 @@ from rest_framework.authentication import TokenAuthentication
 #         cat = Category.objects.get(pk=pk)
 #         return Response({'category': cat.name})
 
+class ArticleAPIListPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 class ArticleAPIList(generics.ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = ArticleAPIListPagination
+
 
 class ArticleAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     permission_classes = (IsAuthenticated,)
     # authentication_classes = (TokenAuthentication,)    # включение доступа только по токенам
+
 
 class ArticleAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Article.objects.all()
