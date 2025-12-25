@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from news_site_app.models import Article, Category
+from news_site_app.models import Category
 
 
 # Create your tests here.
