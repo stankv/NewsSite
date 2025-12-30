@@ -418,7 +418,7 @@ ul.lang-list li a:hover {color: #fdc073;}
 	border-radius: 30px;
 }
 .list-pages .page-num:hover {
-	box-shadow: 3px 3px 1px #d0d0d0; 
+	box-shadow: 3px 3px 1px #d0d0d0;
 }
 .list-pages .page-num-selected {
 	border: none;
@@ -426,5 +426,243 @@ ul.lang-list li a:hover {color: #fdc073;}
 	font-size: 20px;
 }
 .list-pages .page-num-selected:hover {
-	box-shadow: none; 
+	box-shadow: none;
+}
+
+/* ============================ */
+/* МОБИЛЬНАЯ АДАПТИВНОСТЬ */
+/* ============================ */
+
+/* Гамбургер-меню для мобильных */
+.hamburger-menu {
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.hamburger-menu img {
+    width: 100%;
+    height: auto;
+}
+
+/* Мобильное меню (скрытое по умолчанию) */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(63, 65, 55, 0.95);
+    z-index: 1000;
+    padding-top: 80px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.mobile-menu.active {
+    display: block;
+}
+
+.mobile-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 20px;
+}
+
+.mobile-menu ul li {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.mobile-menu ul li a {
+    color: #fdc073;
+    font-size: 24px;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid rgba(253, 192, 115, 0.3);
+}
+
+.mobile-menu ul li a:hover {
+    color: #FDA83D;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu .mobile-categories {
+    margin-top: 30px;
+    border-top: 2px solid #fdc073;
+    padding-top: 20px;
+}
+
+.mobile-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #fdc073;
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1002;
+}
+
+/* Медиа-запросы для мобильных устройств */
+@media (max-width: 1024px) {
+    /* Уменьшаем отступы и размеры */
+    .content {
+        padding: 20px 15px;
+    }
+
+    ul.mainmenu li {
+        margin: 18px 20px 0 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Скрываем обычное меню на мобильных */
+    .header .mainmenu li:not(.logo):not(.last) {
+        display: none;
+    }
+
+    /* Показываем гамбургер-меню */
+    .hamburger-menu {
+        display: block;
+    }
+
+    /* Скрываем левую панель с категориями */
+    .left-chapters {
+        display: none;
+    }
+
+    /* Растягиваем контент на всю ширину */
+    .table-content {
+        display: block;
+    }
+
+    .content {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* Адаптируем шапку */
+    .header {
+        height: 50px;
+        position: relative;
+    }
+
+    .logo {
+        background-size: contain;
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+    }
+
+    /* Адаптируем меню в шапке (логин/регистрация) */
+    ul.mainmenu li.last {
+        position: absolute;
+        right: 60px;
+        top: 0;
+        margin: 15px 0 0 0;
+        font-size: 16px;
+    }
+
+    /* Адаптируем изображения в статьях */
+    img {
+        max-width: 100%;
+    }
+
+    .img-article-left {
+        max-width: 100%;
+        float: none;
+        padding: 0 0 10px 0;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Адаптируем списки статей */
+    ul.list-articles li {
+        padding: 10px 0;
+    }
+
+    .article-panel {
+        font-size: 14px;
+    }
+
+    /* Адаптируем пагинацию */
+    .list-pages .page-num, .list-pages .page-num-selected {
+        width: 40px;
+        height: 30px;
+        padding: 10px 0 0 0;
+        margin: 0 5px;
+    }
+
+    .list-pages a {
+        font-size: 18px;
+    }
+
+    /* Адаптируем формы */
+    .form-label {
+        display: block;
+        min-width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .form-input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Адаптируем футер */
+    #footer {
+        padding: 15px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Еще более мелкие экраны */
+    ul.mainmenu li.last {
+        font-size: 14px;
+        right: 50px;
+    }
+
+    .hamburger-menu {
+        right: 10px;
+        top: 10px;
+        width: 25px;
+        height: 25px;
+    }
+
+    .content-text {
+        margin: 20px 0 0 0;
+        font-size: 16px;
+    }
+
+    .article-panel p.first,
+    .article-panel p.last {
+        float: none;
+        display: block;
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    h1 {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
 }
