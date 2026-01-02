@@ -1,11 +1,23 @@
 #header, .module caption  {
-    background: #5e3a00;
+    background:#0054a6;
 }
 
-a.section:link, a.section:visited, #nav-sidebar .current-app .section:visited {
-color: #f5dd5d;
+.submit-row input {
+    background:#0054a6;
+}
+
+.submit-row input:hover {
+    background:#003d7a;
+}
+
+#site-name a:link, #site-name a:visited, #header {
+    color: #FF8C00;
+}
+
+section:link, a.section:link, a.section:visited, #nav-sidebar .current-app .section:visited {
+color: #FF8C00; /* #f5dd5d; */
 }
 
 div.breadcrumbs {
-background:#555
+background:#0054a6;
 }
